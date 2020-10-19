@@ -8,7 +8,7 @@
 #'
 #' It is also assumed that an \code{NA} value for logFC will be provided for the
 #' gene-set nodes. This is used to generate colours for each node, with edges
-#' from each node being drawn in the same colours.
+#' from each node being drawn in the same colours, making this column mandatory
 #'
 #' Available palettes for nodes can be found using
 #' \code{rownames(RColorBrewer::brewer.pal.info)} for the RColorBrewer palettes,
@@ -18,8 +18,9 @@
 #' @param layout The layout algorithm to apply
 #' @param up_col The colour to label up-regulated genes
 #' @param down_col The colour to label down-regulated genes
-#' @param palette The name of the palette to use. Can be drawn from those
-#' provided in RColorBrewer::brewer.pal, or grDevices::hcl.colors
+#' @param palette The name of the palette to use for gene-set nodes.
+#' Can be drawn from those provided in RColorBrewer::brewer.pal, or
+#' grDevices::hcl.colors
 #' @param palette_type Choose either RColorBrewer or grDevices palettes
 #' @param gs_label_size Size of gene-set labels
 #' @param gs_point_size Size of gene-set nodes

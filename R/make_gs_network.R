@@ -1,10 +1,11 @@
 #' @title Form a tidygraph object
-#' @description Form a tidygraph from a list of genesets
+#' @description Form a tidygraph from a list of gene-sets
 #' @details
-#' Taking a list of genesets as the primary input form a network. Names of each
-#' list element are assumed to be the names of genesets, with the values within
+#' Taking a list of gene-sets as the primary input form a network. Names of each
+#' list element are assumed to be the names of gene-sets, with the values within
 #' each element assumed to be gene identifiers. Choosing actual gene names may
-#' be the most useful option.
+#' be the most useful option. All genes provided will be plotted, so removing
+#' uninteresting genes may be helpful before passing to this function
 #'
 #' If provided, the topTable will be joined onto the nodes allowing all columns
 #' to be used for modifying the final plot.
@@ -16,7 +17,7 @@
 #'
 #' It should also be noted that these networks become very cumbersome, very
 #' quickly and as such, supplying a relatively small number (e.g. 10) of nodes
-#' (i.e. genesets) may be the most viable approach
+#' (i.e. gene-sets) may be the most viable approach
 #'
 #' @param gene_sets A list of gene-sets as described in the details section
 #' @param top_table An optional topTable as output by a function such as

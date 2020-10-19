@@ -36,8 +36,9 @@ plot_gs_network(
 
 \item{down_col}{The colour to label down-regulated genes}
 
-\item{palette}{The name of the palette to use. Can be drawn from those
-provided in RColorBrewer::brewer.pal, or grDevices::hcl.colors}
+\item{palette}{The name of the palette to use for gene-set nodes.
+Can be drawn from those provided in RColorBrewer::brewer.pal, or
+grDevices::hcl.colors}
 
 \item{palette_type}{Choose either RColorBrewer or grDevices palettes}
 
@@ -88,7 +89,7 @@ nodes component of the tidygraph.
 
 It is also assumed that an \code{NA} value for logFC will be provided for the
 gene-set nodes. This is used to generate colours for each node, with edges
-from each node being drawn in the same colours.
+from each node being drawn in the same colours, making this column mandatory
 
 Available palettes for nodes can be found using
 \code{rownames(RColorBrewer::brewer.pal.info)} for the RColorBrewer palettes,

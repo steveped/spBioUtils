@@ -11,18 +11,23 @@ License: file LICENSE
 Encoding: UTF-8
 Depends:
   R (>= 4.0.0),
+  ggfortify,
   ggplot2,
-  tibble
+  ggraph,
+  tibble,
+  tidygraph
 Imports:
   dplyr (>= 1.0.0),
-  ggraph,
+  edgeR,
   grDevices,
   grid,
   magrittr,
   methods,
   RColorBrewer,
+  S4Vectors,
+  stats,
   stringr,
-  tidygraph,
+  SummarizedExperiment,
   tidyselect,
   utils
 Suggests:
