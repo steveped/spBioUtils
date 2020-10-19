@@ -8,6 +8,9 @@
 #' @param x A matrix or data.frame
 #' @param corner The corner to show
 #' @param n The number of rows and columns to show
+#' @param ... arguments to be passed to or from other methods.
+#'
+#' @importFrom utils head
 #'
 #' @export
 corner <- function(x, ...) UseMethod("corner")

@@ -25,6 +25,8 @@ corner(x, ...)
 \arguments{
 \item{x}{A matrix or data.frame}
 
+\item{...}{arguments to be passed to or from other methods.}
+
 \item{corner}{The corner to show}
 
 \item{n}{The number of rows and columns to show}

@@ -12,6 +12,7 @@
 #' @return A character vector
 #'
 #' @importFrom stringr str_replace_all
+#' @importFrom grDevices col2rgb rgb
 #' @export
 change_node_colour <- function(x, pattern, col){
 

@@ -10,12 +10,21 @@ Description: Various utility functions for bioinformatics.
 License: file LICENSE
 Encoding: UTF-8
 Depends:
-  R (>= 4.0.0)
+  R (>= 4.0.0),
+  ggplot2,
+  tibble
 Imports:
   dplyr (>= 1.0.0),
+  ggraph,
+  grDevices,
+  grid,
+  magrittr,
+  methods,
+  RColorBrewer,
   stringr,
-  tibble,
-  tidygraph
+  tidygraph,
+  tidyselect,
+  utils
 Suggests:
   DiagrammeR,
   testthat

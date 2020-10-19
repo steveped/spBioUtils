@@ -12,7 +12,12 @@
 #'
 #' By default, all nodes (i.e. gene-sets and gene names) will be contained in a
 #' column named 'label'. Setting the correct column from the topTable to join
-#' on can be performed using the .by argument
+#' on can be performed using the .by argument.
+#'
+#' It should also be noted that these networks become very cumbersome, very
+#' quickly and as such, supplying a relatively small number (e.g. 10) of nodes
+#' (i.e. genesets) may be the most viable approach
+#'
 #' @param gene_sets A list of gene-sets as described in the details section
 #' @param top_table An optional topTable as output by a function such as
 #' limma::topTable(), or edgeR::topTags()$table
@@ -22,11 +27,22 @@
 #' @return A tbl_graph
 #'
 #' @importFrom tibble tibble rowid_to_column
-#' @importFrom dplyr left_join
+#' @importFrom dplyr left_join bind_rows
 #' @importFrom tidygraph tbl_graph activate
+#' @importFrom tidyselect one_of
+#'
+#' @examples
+#' set.seed(100)
+#' geneSets <- list(
+#'   a = as.character(1:3), b = as.character(3:5), c = as.character((1:3)*2)
+#'   )
+#' topTable <- tibble(
+#'   gene_name = as.character(1:6), PValue = runif(6), logFC = runif(6, -3, 3)
+#'   )
+#' tg <- make_gs_network(gene_sets = geneSets, top_table = topTable)
 #'
 #' @export
-make_geneset_network <- function(gene_sets, top_table, .by = c("label" = "gene_name")){
+make_gs_network <- function(gene_sets, top_table, .by = c("label" = "gene_name")){
 
   ## Check all genesets are characters
   stopifnot(
@@ -38,6 +54,7 @@ make_geneset_network <- function(gene_sets, top_table, .by = c("label" = "gene_n
   stopifnot(length(names(gene_sets)) == length(gene_sets))
 
   ## Create a node list
+  label <- c() # Dummy for R CMD check
   nodes <- tibble(label = c(names(gene_sets), unlist(gene_sets)))
   nodes <- dplyr::distinct(nodes, label)
   nodes <- rowid_to_column(nodes, "id")
@@ -51,10 +68,10 @@ make_geneset_network <- function(gene_sets, top_table, .by = c("label" = "gene_n
   )
   edges <- bind_rows(edges)
   edges <- left_join(edges, nodes, by = c("pathway" = "label"))
-  edges <- dplyr::rename(edges, from = id)
+  edges <- dplyr::rename(edges, "from" = "id")
   edges <- left_join(edges, nodes, by = c("gene" = "label"))
-  edges <- dplyr::rename(edges, to = id)
-  edges <- dplyr::select(edges, from, to)
+  edges <- dplyr::rename(edges, "to" = "id")
+  edges <- dplyr::select(edges, one_of(c("from", "to")))
 
   ## Add the topTable
   if (!missing(top_table)){
