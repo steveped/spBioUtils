@@ -1,0 +1,20 @@
+Package: spBioUtils
+Type: Package
+Date: 2020/10/16
+Title: Various utility functions for bioinformatics
+Version: 0.1.0
+Authors@R: person("Stephen", "Pederson", 
+    email = "stephen.pederson.au@gmail.com", role = c("aut", "cre")
+    )
+Description: Various utility functions for bioinformatics.
+License: file LICENSE
+Encoding: UTF-8
+Depends:
+  R (>= 4.0.0)
+Imports:
+  stringr
+Suggests:
+    DiagrammeR,
+    testthat
+RoxygenNote: 7.1.1
+LazyData: true
