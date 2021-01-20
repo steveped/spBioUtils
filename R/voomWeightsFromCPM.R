@@ -30,25 +30,28 @@
 #' @param ... Passed to lmFit internally
 #'
 #' @return
-#' A list with elements \code{Amean}, \code{sigma} and \code{w}.
-#' The weights for downstream analysis are in the element \code{w}, whilst
-#' the values \code{Amean} and \code{sigma} may be useful for plotting
-#' the mean-variance relationship before incorporation of the precision
-#' weights.
-#' Typically, you would plot \code{sqrt{sigma}} on the y-axis to replicate
-#' the default plots of the original \code{voom} function
+#' An object of class \code{EList} as would be output by voom.
+#' Importantly, there will be no \code{genes} element, although this can be
+#' added later.
+#' Similarly, the returned \code{targets} element will only contain sample
+#' names and library sizes.
+#' This can be incorporated with any other metadata as required.
 #'
-#' If sample weights were provided, modified weights will also be returned, as
-#' the initial function \code{\link{voomWithQualityWeights}} performs two
-#' rounds of estimation of sample weights.
-#' Here we would simply provide the initial weights round a priori, with the
+#' Plotting data is always returned, noting the the value \code{sx} has not
+#' been offset by the library sizes and will be simple logCPM values.
+#'
+#' If initial sample weights were provided, modified weights will also be
+#' returned, as the initial function \code{\link{voomWithQualityWeights}}
+#' performs two rounds of estimation of sample weights.
+#' Here we would simply provide the initial weights a priori, with the
 #' second round performed within the function.
 #' Importantly, this second round of sample weight estimation uses the precision
-#' weights ensuring the correct mean-variance relationship is used for the
+#' weights ensuring the correct mean-variance relationship is used for the final
 #' estimation of sample weights
 #'
-#' @importFrom limma lmFit arrayWeights
+#' @import limma
 #' @importFrom stats approxfun lowess
+#' @importFrom methods new
 #'
 #' @export
 voomWeightsFromCPM <- function(
@@ -66,7 +69,7 @@ voomWeightsFromCPM <- function(
   if (m < 0 & !isLogCPM)
     stop("Negative CPM values not allowed")
   if (m == 0 & !isLogCPM)
-    stop("Please ensure an offset/prior.count is used for estimation of CPM values.")
+    stop("Please ensure an offset is used for estimation of CPM values.")
 
   ## Sort out the design matrix
   if (is.null(design)) {
@@ -94,7 +97,8 @@ voomWeightsFromCPM <- function(
   fit <- lmFit(cpm, design, weights = w0, ...)
   if (is.null(fit$Amean))
     fit$Amean <- rowMeans(cpm, na.rm = TRUE)
-  sx <- fit$Amean + mean(log2(lib.size + 1)) - log2(1e+06)
+  # sx <- fit$Amean + mean(log2(lib.size + 1)) - log2(1e+06)
+  sx <- fit$Amean
   sy <- sqrt(fit$sigma)
   l <- lowess(sx, sy, f = span)
   f <- approxfun(l, rule = 2, ties = list("ordered", mean))
@@ -125,14 +129,26 @@ voomWeightsFromCPM <- function(
     w <- t(aw * t(w))
   }
 
-  ## Only return the weights
-  return(
-    list(
-      Amean = fit$Amean,
-      sigma = fit$sigma,
-      w = w,
-      sample.weights = aw
-    )
+  ## Initialise output
+  nm <- colnames(cpm)
+  if (is.null(nm)) nm <- seq_len(i)
+  out <- list()
+  out$E <- cpm
+  out$weights <- w
+  out$design <- design
+  out$targets <- data.frame(
+    sample = nm,
+    lib.size = lib.size
   )
+  if (!is.null(aw))
+    out$targets$sample.weights <- aw
+  out$voom.xy <- list(
+    x = sx, y = sy,
+    xlab = "logCPM", ylab = "Sqrt ( standard deviation )"
+  )
+  out$voom.line <- l
+
+  ## Return an EList
+  new("EList", out)
 
 }

@@ -14,6 +14,7 @@ Depends:
   ggfortify,
   ggplot2,
   ggraph,
+  limma,
   tibble,
   tidygraph
 Imports:
@@ -21,7 +22,6 @@ Imports:
   edgeR,
   grDevices,
   grid,
-  limma,
   magrittr,
   methods,
   RColorBrewer,

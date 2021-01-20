@@ -34,21 +34,23 @@ trend. Expressed as a proportion between 0 and 1.}
 \item{...}{Passed to lmFit internally}
 }
 \value{
-A list with elements \code{Amean}, \code{sigma} and \code{w}.
-The weights for downstream analysis are in the element \code{w}, whilst
-the values \code{Amean} and \code{sigma} may be useful for plotting
-the mean-variance relationship before incorporation of the precision
-weights.
-Typically, you would plot \code{sqrt{sigma}} on the y-axis to replicate
-the default plots of the original \code{voom} function
+An object of class \code{EList} as would be output by voom.
+Importantly, there will be no \code{genes} element, although this can be
+added later.
+Similarly, the returned \code{targets} element will only contain sample
+names and library sizes.
+This can be incorporated with any other metadata as required.
 
-If sample weights were provided, modified weights will also be returned, as
-the initial function \code{\link{voomWithQualityWeights}} performs two
-rounds of estimation of sample weights.
-Here we would simply provide the initial weights round a priori, with the
+Plotting data is always returned, noting the the value \code{sx} has not
+been offset by the library sizes and will be simple logCPM values.
+
+If initial sample weights were provided, modified weights will also be
+returned, as the initial function \code{\link{voomWithQualityWeights}}
+performs two rounds of estimation of sample weights.
+Here we would simply provide the initial weights a priori, with the
 second round performed within the function.
 Importantly, this second round of sample weight estimation uses the precision
-weights ensuring the correct mean-variance relationship is used for the
+weights ensuring the correct mean-variance relationship is used for the final
 estimation of sample weights
 }
 \description{
