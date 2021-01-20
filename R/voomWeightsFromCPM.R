@@ -37,8 +37,9 @@
 #' names and library sizes.
 #' This can be incorporated with any other metadata as required.
 #'
-#' Plotting data is always returned, noting the the value \code{sx} has not
+#' Plotting data is always returned, noting the the value \code{sx} has
 #' been offset by the library sizes and will be simple logCPM values.
+#' As such, the fitted \code{Amean} is also returned in this list element.
 #'
 #' If initial sample weights were provided, modified weights will also be
 #' returned, as the initial function \code{\link{voomWithQualityWeights}}
@@ -97,8 +98,7 @@ voomWeightsFromCPM <- function(
   fit <- lmFit(cpm, design, weights = w0, ...)
   if (is.null(fit$Amean))
     fit$Amean <- rowMeans(cpm, na.rm = TRUE)
-  # sx <- fit$Amean + mean(log2(lib.size + 1)) - log2(1e+06)
-  sx <- fit$Amean
+  sx <- fit$Amean + mean(log2(lib.size + 1)) - log2(1e+06)
   sy <- sqrt(fit$sigma)
   l <- lowess(sx, sy, f = span)
   f <- approxfun(l, rule = 2, ties = list("ordered", mean))
@@ -143,8 +143,8 @@ voomWeightsFromCPM <- function(
   if (!is.null(aw))
     out$targets$sample.weights <- aw
   out$voom.xy <- list(
-    x = sx, y = sy,
-    xlab = "logCPM", ylab = "Sqrt ( standard deviation )"
+    x = sx, y = sy, Amean = fit$Amean,
+    xlab = "log2( count size + 0.5 )", ylab = "Sqrt ( standard deviation )"
   )
   out$voom.line <- l
 

@@ -41,8 +41,9 @@ Similarly, the returned \code{targets} element will only contain sample
 names and library sizes.
 This can be incorporated with any other metadata as required.
 
-Plotting data is always returned, noting the the value \code{sx} has not
+Plotting data is always returned, noting the the value \code{sx} has
 been offset by the library sizes and will be simple logCPM values.
+As such, the fitted \code{Amean} is also returned in this list element.
 
 If initial sample weights were provided, modified weights will also be
 returned, as the initial function \code{\link{voomWithQualityWeights}}
